@@ -22,6 +22,7 @@ Welcome to the Program in Statistics and Methodology's (PRISM) Data Manipulation
 The Tidyverse is a suite of packages and tools designed to help data scientists import, clean, manipulate, and visualize their data.  The Tidyverse packages are unified by a shared philosophy of data structure ("tidy data") and programming.  The Tidyverse suite of packages consists of `readr`, `tibble`, `tidyr`, `dplyr`, `purrr`, `ggplot2`, `stringr`, and `forcats`.  The Tidyverse, itself, is also a package that can be installed and accessed.
 
 ```{r install}
+set.seed(1234)
 install.packages(c("tidyverse", "testit", "microbenchmark", "RMySQL"), repos = "http://cran.us.r-project.org")
 library("tidyverse")
 library("testit")
@@ -53,7 +54,7 @@ By the end of this workshop, it is my hope that you will feel comfortable using 
 As this workshop is primarily focused on wrangling data, we will punt on data importation (`haven`, `readr`) and data visualization (`ggplot2`) in the Tidyverse. 
 
 # Tidy Data and Tidying Data
-There are two packages for producing "tidy" data within the Tidyverse framework.  The first, `tibble`, is a package introducing a new class of data frames, the `tbl`.  The second, `tidyr`, is a package designed to assist in producing "tidy" data.  Tidy data is descirbed as data where each row is a different observation and each column is a different feature measured on each observation.
+There are two packages for producing "tidy" data within the Tidyverse framework.  The first, `tibble`, is a package introducing a new class of data frames, the `tbl`.  The second, `tidyr`, is a package designed to assist in producing "tidy" data.  Tidy data is described as data where each row is a different observation and each column is a different feature measured on each observation.
 
 ## `tibble`
 ### Features
@@ -116,7 +117,7 @@ if (requireNamespace("microbenchmark")) {
 ````
 
 ### Mangable Printing
-When printed, tibbles will be much more managable, printing only the first ten rows and all the columns that will fit on one screen.  This of course can be adjusted with a series of options:
+When printed, tibbles will be much more manageable, printing only the first ten rows and all the columns that will fit on one screen.  This of course can be adjusted with a series of options:
 
 * `options(tibble.print_max = n, tibble.print_min = m)`: if there are more than n rows, print only the first m rows. Use `options(tibble.print_max = Inf)` to show all rows, similar to the default print method for data frames.
 * `options(tibble.width = Inf)` will always print all columns, regardless of the width of the screen.
@@ -143,10 +144,10 @@ class(df2$x)
 
 Data frames allow for partial matching for column names using the `$` indexing method.  This does not work for tibbles.
 ```{r, $match}
-df <- data.frame(leters = letters)
+df <- data.frame(let = letters)
 df$l
 
-df2 <- tibble(letters = letters)
+df2 <- tibble(let = letters)
 df2$l
 ````
 
@@ -173,7 +174,7 @@ testit::has_error(tibble(a = letters[1:4], b = 1:5))
 Central to data analysis, and even data preparation, is structuring datasets to the format necessary for analysis. Hadley Wickham refers to this step as data tidying.  There are several principles of tidy data laid out in Wickham's *The Journal of Statistical Software* piece "Tidy Data."  These include:
 
 * A dataset that is a collection of values, either stored as numbers (if quantitative) or strings (if qualitative).  
-* Each value belongs to a variable, stored column-wise, or an obsrvation, stored row-wise.  
+* Each value belongs to a variable, stored column-wise, or an observation, stored row-wise.  
 * A variable contains all values that measure a common attribute across observations (such as GDP).
 * An observation contains a unit's collection of values measured across variables. 
 * Data can be relational across tables.
@@ -202,7 +203,7 @@ messy
 
 ````
 
-In this case we have three variables but currently we only have one of them in a column (name).  There are two other variables that we need to create: treatment and heartrate.  We can use `gather` to produce these variables and tidy the data:
+In this case we have three variables but currently we only have one of them in a column (name).  There are two other variables that we need to create: treatment and heart rate.  We can use `gather` to produce these variables and tidy the data:
 ```{r, gather2}
 messy %>%
   gather(drug, heartrate, a:b)
@@ -211,7 +212,6 @@ messy %>%
 ### Separating Data
 If variables are grouped together into one, we may be interested in using the `separate()` function to disentangle them.  This function is related to `extract()`, which uses regular expressions for splitting instead of pattern.  Here we have some fake data examining two outcomes observed over two different time periods according to a treatment or control condition. 
 ```{r, separate}
-set.seed(10)
 messy <- data.frame(
   id = 1:4,
   trt = sample(rep(c('control', 'treatment'), each = 2)),
@@ -221,11 +221,13 @@ messy <- data.frame(
   outcome2.after = runif(4)
 )
 
+messy
+
 ````
 
 We will begin tidying this messy data by using the `gather()` command to turn the treatment columns into key-value paired data according to the key `id` and `time`:
 ```{r, gathering}
-# Here we are using the pipe operator which takes an argument or object on the left and passess it as the first argument to a function ont he right hand side.  
+# Here we are using the pipe operator which takes an argument or object on the left and passess it as the first argument to the function on the right hand side.  
 # We are specifying two new columns for key and value and specifying that the variables other than id and trt should be gathered
 tidier <- messy %>%
   gather(time, value, -id, -trt)
@@ -241,16 +243,17 @@ tidy %>% head(8)
 ````
 
 ### Spreading Data
-The `spread()` function takes two columns, a key and a value, and then spreads them into multiple columns.  This takes portrait data and makes it into landscape data.  If you have variables that are in rows instead of columns, this variable is particularly useful.  Here is an example:
+The `spread()` function takes two columns, a key and a value, and then spreads them into multiple columns.  This takes portrait data and makes it into landscape data.  If you have variables that are in rows instead of columns, this function is particularly useful.  Here is an example:
 ```{r, spreading}
 # Generate fake stock price data
-set.seed(1234)
 stocks <- data.frame(
   time = as.Date('2009-01-01') + 0:9,
   X = rnorm(10, 100, 10),
   Y = rnorm(10, 125, 20),
   Z = rnorm(10, 150, 4)
 )
+
+head(stocks)
 
 # Gather to make these into long data
 stocks_long <- stocks %>% gather(stock, price, -time)
@@ -270,10 +273,10 @@ head(stocks_wider)
 When you're interested in the general reshaping of data, the `reshape2` package may be useful.  Given that most analysis requires tidy data, the `tidyr` package should suffice for most cases.  
 
 # Data Manipulation
-Data manipulation is a core task in data analysis.  Data manipulation refers to the process of changing or modifiying data so you can efficiently extract, filter, and transform it.  In the Tidyverse, the `dplyr` package consists of five "verbs" that are useful for data manipulation: `select()`, `mutate()`, `filter()`, `arrange()`, and `summarize()`.  `dplyr` also assists in binding, grouping, and merging data, as well as accessing external databases. 
+Data manipulation is a core task in data analysis.  Data manipulation refers to the process of changing or modifying data so you can efficiently extract, filter, and transform it.  In the Tidyverse, the `dplyr` package consists of five "verbs" that are useful for data manipulation: `select()`, `mutate()`, `filter()`, `arrange()`, and `summarize()`.  `dplyr` also assists in binding, grouping, and merging data, as well as accessing external databases. 
 
 ## Selecting Columns
-Often we will want to select columns from a data frame.  To do this in `dplyr` there is the `select()` function which takes a table and a number of variable names  You can also use `-` to exclude some variables, or index variables using column numbers.  
+Often we will want to select columns from a data frame.  To do this in `dplyr` there is the `select()` function which takes a table and a number of variable names.  You can also use `-` to exclude some variables, or index variables using column numbers.  
 ```{r, select}
 data(iris)
 reduced <- iris %>% select(Species, Sepal.Width)
@@ -310,7 +313,7 @@ summary(iris$Petal.Area)
 ````
 
 ## Filtering Data
-`filter()` filters out rows based upon some expression.  Think about it as the row-wise function of `select()`.  We can narrow observations based upon boolean logicals.  `filter()` will return all rows that pass the logical test that is specified.  This returns a new dataset that must be saved. 
+`filter()` filters out rows based upon some expression.  Think about it as the row-wise function of `select()`.  We can narrow observations based upon Boolean logicals.  `filter()` will return all rows that pass the logical test that is specified.  This returns a new dataset that must be saved. 
 
 ```{r, filtering}
 setosa_df <- iris %>% filter(Species == "setosa")
@@ -342,7 +345,7 @@ head(sorted_large_irises)
 ## Summarizing Data
 We can also use the `summarise()` or `summarize()` function to create a new dataset of summary statistics.  These functions include the same syntax as the prior commands and allows you to choose summary statistics to include in a new aggregated dataframe.  Aggregate functions should be used, these are functions that take on a vector of values and return a single number.
 
-`dplyr` also comes with a variety of aggregate functions that are in addiion to those defined in R:
+`dplyr` also comes with a variety of aggregate functions that are in addition to those defined in R:
 
 * `first(x)`: The first element of vector x.
 * `last(x)`: The last element of vector x.
@@ -362,7 +365,7 @@ iris_summary
 
 
 ## Grouping Data
-`dplyr` also has built-in means to group data.  `summarize()` eturnsaggregated measures for a vector or for an entire dataset.  But, what if we are interested in doing aggregate measures for groups of rows? We can look at group-based differences by using the `group_by()` function.  This function takes a tibble and some group-indicator.  The dataset will look the same, but then when you `summarise()` a grouped dataset, the cool part comes in, you get groupped aggregate statistics. 
+`dplyr` also has built-in means to group data.  `summarize()` returns aggregated measures for a vector or for an entire dataset.  But, what if we are interested in doing aggregate measures for groups of rows? We can look at group-based differences by using the `group_by()` function.  This function takes a tibble and some group-indicator.  The dataset will look the same, but then when you `summarise()` a grouped dataset, the cool part comes in, you get grouped aggregate statistics. 
 
 ```{r, group_by}
 iris_summary <- iris %>%
@@ -409,7 +412,7 @@ setequal(iris_whole, iris_whole_purr)
 ````
 
 ## Joining Data
-Often our data in R exist across multiple datasets.  As such, we will want to join datasets so that assembling datasets will be much easier and more effective. In base R there is the `merge()` function.  `dplyr`'s join functions are better than base R's `merge()` in that it preserves row order, has better synax, and can be used for different databases.  The grammar of `dplyr`'s data joins are similar to PostgreSQL's grammar.  
+Often our data in R exist across multiple datasets.  As such, we will want to join datasets so that assembling datasets will be much easier and more effective. In base R there is the `merge()` function.  `dplyr`'s join functions are better than base R's `merge()` in that it preserves row order, has better syntax, and can be used for different databases.  The grammar of `dplyr`'s data joins are similar to PostgreSQL's grammar.  
 
 ### Keys
 A join combines columns of two or more dataframe according to matching values in some identifier variables.  To do this, analysts identify a set of keys that exist in both dataframes and combine tables according to matching key values in both dataframes. The first table's key is the primary key and the second table's key is the foreign key.  The primary key should uniquely identify each row in a dataframe.  The foreign key only has to match with a primary key.  Sometimes you will have multiple keys.  

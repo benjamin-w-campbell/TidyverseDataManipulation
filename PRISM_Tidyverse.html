@@ -1482,12 +1482,13 @@ div.tocify {
 <div id="what-is-the-tidyverse" class="section level2">
 <h2><span class="header-section-number">1.1</span> What is the Tidyverse?</h2>
 <p>The Tidyverse is a suite of packages and tools designed to help data scientists import, clean, manipulate, and visualize their data. The Tidyverse packages are unified by a shared philosophy of data structure (“tidy data”) and programming. The Tidyverse suite of packages consists of <code>readr</code>, <code>tibble</code>, <code>tidyr</code>, <code>dplyr</code>, <code>purrr</code>, <code>ggplot2</code>, <code>stringr</code>, and <code>forcats</code>. The Tidyverse, itself, is also a package that can be installed and accessed.</p>
-<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;testit&quot;, &quot;microbenchmark&quot;, &quot;RMySQL&quot;), repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
+<pre class="r"><code>set.seed(1234)
+install.packages(c(&quot;tidyverse&quot;, &quot;testit&quot;, &quot;microbenchmark&quot;, &quot;RMySQL&quot;), repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
 <pre><code>## Installing packages into '/Users/benjamincampbell/Library/R/3.4/library'
 ## (as 'lib' is unspecified)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/vk/31y3cgkd3l52_0ynqgx9lrxr0000gn/T//RtmpXL6nRe/downloaded_packages</code></pre>
+##  /var/folders/vk/31y3cgkd3l52_0ynqgx9lrxr0000gn/T//RtmpcKo351/downloaded_packages</code></pre>
 <pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
 <pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.4
@@ -1534,7 +1535,7 @@ library(&quot;RMySQL&quot;)</code></pre>
 </div>
 <div id="tidy-data-and-tidying-data" class="section level1">
 <h1><span class="header-section-number">2</span> Tidy Data and Tidying Data</h1>
-<p>There are two packages for producing “tidy” data within the Tidyverse framework. The first, <code>tibble</code>, is a package introducing a new class of data frames, the <code>tbl</code>. The second, <code>tidyr</code>, is a package designed to assist in producing “tidy” data. Tidy data is descirbed as data where each row is a different observation and each column is a different feature measured on each observation.</p>
+<p>There are two packages for producing “tidy” data within the Tidyverse framework. The first, <code>tibble</code>, is a package introducing a new class of data frames, the <code>tbl</code>. The second, <code>tidyr</code>, is a package designed to assist in producing “tidy” data. Tidy data is described as data where each row is a different observation and each column is a different feature measured on each observation.</p>
 <div id="tibble" class="section level2">
 <h2><span class="header-section-number">2.1</span> <code>tibble</code></h2>
 <div id="features" class="section level3">
@@ -1614,15 +1615,15 @@ tibble(x = 1:5, y = x - mean(x))</code></pre>
 }</code></pre>
 <pre><code>## Unit: microseconds
 ##              expr      min       lq      mean   median        uq      max
-##      as_tibble(l)  368.515  396.117  444.2996  423.040  468.3965  718.742
-##  as.data.frame(l) 1155.954 1192.419 1386.3354 1227.307 1349.8935 3201.297
+##      as_tibble(l)  367.012  401.799  565.8195  443.115  603.5645 2341.569
+##  as.data.frame(l) 1180.468 1227.057 1469.4458 1299.943 1513.2675 3359.543
 ##  neval cld
 ##    100  a 
 ##    100   b</code></pre>
 </div>
 <div id="mangable-printing" class="section level3">
 <h3><span class="header-section-number">2.1.3</span> Mangable Printing</h3>
-<p>When printed, tibbles will be much more managable, printing only the first ten rows and all the columns that will fit on one screen. This of course can be adjusted with a series of options:</p>
+<p>When printed, tibbles will be much more manageable, printing only the first ten rows and all the columns that will fit on one screen. This of course can be adjusted with a series of options:</p>
 <ul>
 <li><code>options(tibble.print_max = n, tibble.print_min = m)</code>: if there are more than n rows, print only the first m rows. Use <code>options(tibble.print_max = Inf)</code> to show all rows, similar to the default print method for data frames.</li>
 <li><code>options(tibble.width = Inf)</code> will always print all columns, regardless of the width of the screen.</li>
@@ -1663,11 +1664,11 @@ class(df2[[1]])</code></pre>
 <pre class="r"><code>class(df2$x)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p>Data frames allow for partial matching for column names using the <code>$</code> indexing method. This does not work for tibbles.</p>
-<pre class="r"><code>df &lt;- data.frame(leters = letters)
+<pre class="r"><code>df &lt;- data.frame(let = letters)
 df$l</code></pre>
 <pre><code>##  [1] a b c d e f g h i j k l m n o p q r s t u v w x y z
 ## Levels: a b c d e f g h i j k l m n o p q r s t u v w x y z</code></pre>
-<pre class="r"><code>df2 &lt;- tibble(letters = letters)
+<pre class="r"><code>df2 &lt;- tibble(let = letters)
 df2$l</code></pre>
 <pre><code>## Warning: Unknown or uninitialised column: 'l'.</code></pre>
 <pre><code>## NULL</code></pre>
@@ -1715,7 +1716,7 @@ testit::has_error(tibble(a = letters[1:4], b = 1:2))</code></pre>
 <ul>
 <li>A dataset that is a collection of values, either stored as numbers (if quantitative) or strings (if qualitative).<br />
 </li>
-<li>Each value belongs to a variable, stored column-wise, or an obsrvation, stored row-wise.<br />
+<li>Each value belongs to a variable, stored column-wise, or an observation, stored row-wise.<br />
 </li>
 <li>A variable contains all values that measure a common attribute across observations (such as GDP).</li>
 <li>An observation contains a unit’s collection of values measured across variables.</li>
@@ -1751,7 +1752,7 @@ messy</code></pre>
 ## 1 Bob      67    56
 ## 2 Peter   130   121
 ## 3 Jan     150    20</code></pre>
-<p>In this case we have three variables but currently we only have one of them in a column (name). There are two other variables that we need to create: treatment and heartrate. We can use <code>gather</code> to produce these variables and tidy the data:</p>
+<p>In this case we have three variables but currently we only have one of them in a column (name). There are two other variables that we need to create: treatment and heart rate. We can use <code>gather</code> to produce these variables and tidy the data:</p>
 <pre class="r"><code>messy %&gt;%
   gather(drug, heartrate, a:b)</code></pre>
 <pre><code>## # A tibble: 6 x 3
@@ -1767,49 +1768,59 @@ messy</code></pre>
 <div id="separating-data" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Separating Data</h3>
 <p>If variables are grouped together into one, we may be interested in using the <code>separate()</code> function to disentangle them. This function is related to <code>extract()</code>, which uses regular expressions for splitting instead of pattern. Here we have some fake data examining two outcomes observed over two different time periods according to a treatment or control condition.</p>
-<pre class="r"><code>set.seed(10)
-messy &lt;- data.frame(
+<pre class="r"><code>messy &lt;- data.frame(
   id = 1:4,
   trt = sample(rep(c('control', 'treatment'), each = 2)),
   outcome1.before = runif(4),
   outcome2.before = runif(4),
   outcome1.after = runif(4),
   outcome2.after = runif(4)
-)</code></pre>
+)
+
+messy</code></pre>
+<pre><code>##   id       trt outcome1.before outcome2.before outcome1.after
+## 1  1   control       0.9751596       0.9127080      0.5475543
+## 2  2   control       0.8759398       0.7397774      0.8516214
+## 3  3 treatment       0.4292365       0.9504254      0.5014444
+## 4  4 treatment       0.3547238       0.5261304      0.9361675
+##   outcome2.after
+## 1      0.5778685
+## 2      0.8627265
+## 3      0.7516653
+## 4      0.6981145</code></pre>
 <p>We will begin tidying this messy data by using the <code>gather()</code> command to turn the treatment columns into key-value paired data according to the key <code>id</code> and <code>time</code>:</p>
-<pre class="r"><code># Here we are using the pipe operator which takes an argument or object on the left and passess it as the first argument to a function ont he right hand side.  
+<pre class="r"><code># Here we are using the pipe operator which takes an argument or object on the left and passess it as the first argument to the function on the right hand side.  
 # We are specifying two new columns for key and value and specifying that the variables other than id and trt should be gathered
 tidier &lt;- messy %&gt;%
   gather(time, value, -id, -trt)
 tidier %&gt;% head(8)</code></pre>
-<pre><code>##   id       trt            time      value
-## 1  1 treatment outcome1.before 0.08513597
-## 2  2   control outcome1.before 0.22543662
-## 3  3 treatment outcome1.before 0.27453052
-## 4  4   control outcome1.before 0.27230507
-## 5  1 treatment outcome2.before 0.61582931
-## 6  2   control outcome2.before 0.42967153
-## 7  3 treatment outcome2.before 0.65165567
-## 8  4   control outcome2.before 0.56773775</code></pre>
+<pre><code>##   id       trt            time     value
+## 1  1   control outcome1.before 0.9751596
+## 2  2   control outcome1.before 0.8759398
+## 3  3 treatment outcome1.before 0.4292365
+## 4  4 treatment outcome1.before 0.3547238
+## 5  1   control outcome2.before 0.9127080
+## 6  2   control outcome2.before 0.7397774
+## 7  3 treatment outcome2.before 0.9504254
+## 8  4 treatment outcome2.before 0.5261304</code></pre>
 <p>Then, using <code>separate()</code> we will split the key into the outcome number and the time period using regular expressions:</p>
 <pre class="r"><code>tidy &lt;- tidier %&gt;%
   separate(time, into = c(&quot;outcome&quot;, &quot;time&quot;), sep = &quot;\\.&quot;)
 tidy %&gt;% head(8)</code></pre>
-<pre><code>##   id       trt  outcome   time      value
-## 1  1 treatment outcome1 before 0.08513597
-## 2  2   control outcome1 before 0.22543662
-## 3  3 treatment outcome1 before 0.27453052
-## 4  4   control outcome1 before 0.27230507
-## 5  1 treatment outcome2 before 0.61582931
-## 6  2   control outcome2 before 0.42967153
-## 7  3 treatment outcome2 before 0.65165567
-## 8  4   control outcome2 before 0.56773775</code></pre>
+<pre><code>##   id       trt  outcome   time     value
+## 1  1   control outcome1 before 0.9751596
+## 2  2   control outcome1 before 0.8759398
+## 3  3 treatment outcome1 before 0.4292365
+## 4  4 treatment outcome1 before 0.3547238
+## 5  1   control outcome2 before 0.9127080
+## 6  2   control outcome2 before 0.7397774
+## 7  3 treatment outcome2 before 0.9504254
+## 8  4 treatment outcome2 before 0.5261304</code></pre>
 </div>
 <div id="spreading-data" class="section level3">
 <h3><span class="header-section-number">2.2.4</span> Spreading Data</h3>
-<p>The <code>spread()</code> function takes two columns, a key and a value, and then spreads them into multiple columns. This takes portrait data and makes it into landscape data. If you have variables that are in rows instead of columns, this variable is particularly useful. Here is an example:</p>
+<p>The <code>spread()</code> function takes two columns, a key and a value, and then spreads them into multiple columns. This takes portrait data and makes it into landscape data. If you have variables that are in rows instead of columns, this function is particularly useful. Here is an example:</p>
 <pre class="r"><code># Generate fake stock price data
-set.seed(1234)
 stocks &lt;- data.frame(
   time = as.Date('2009-01-01') + 0:9,
   X = rnorm(10, 100, 10),
@@ -1817,39 +1828,47 @@ stocks &lt;- data.frame(
   Z = rnorm(10, 150, 4)
 )
 
-# Gather to make these into long data
+head(stocks)</code></pre>
+<pre><code>##         time         X         Y        Z
+## 1 2009-01-01 108.01125  93.08611 152.3230
+## 2 2009-01-02  79.84799 121.25669 153.8985
+## 3 2009-01-03 100.47396 136.35269 152.3498
+## 4 2009-01-04 106.13097 128.25358 150.9811
+## 5 2009-01-05  98.29982  97.56034 143.7360
+## 6 2009-01-06 102.25760  87.32095 147.9675</code></pre>
+<pre class="r"><code># Gather to make these into long data
 stocks_long &lt;- stocks %&gt;% gather(stock, price, -time)
 head(stocks_long)</code></pre>
 <pre><code>##         time stock     price
-## 1 2009-01-01     X  87.92934
-## 2 2009-01-02     X 102.77429
-## 3 2009-01-03     X 110.84441
-## 4 2009-01-04     X  76.54302
-## 5 2009-01-05     X 104.29125
-## 6 2009-01-06     X 105.06056</code></pre>
+## 1 2009-01-01     X 108.01125
+## 2 2009-01-02     X  79.84799
+## 3 2009-01-03     X 100.47396
+## 4 2009-01-04     X 106.13097
+## 5 2009-01-05     X  98.29982
+## 6 2009-01-06     X 102.25760</code></pre>
 <pre class="r"><code># Make this back into wide data, which is the same as the original
 stocks_wide &lt;- stocks_long %&gt;% spread(stock, price)
 head(stocks_wide)</code></pre>
-<pre><code>##         time         X        Y        Z
-## 1 2009-01-01  87.92934 115.4561 150.5364
-## 2 2009-01-02 102.77429 105.0323 148.0373
-## 3 2009-01-03 110.84441 109.4749 148.2378
-## 4 2009-01-04  76.54302 126.2892 151.8384
-## 5 2009-01-05 104.29125 144.1899 147.2251
-## 6 2009-01-06 105.06056 122.7943 144.2072</code></pre>
+<pre><code>##         time         X         Y        Z
+## 1 2009-01-01 108.01125  93.08611 152.3230
+## 2 2009-01-02  79.84799 121.25669 153.8985
+## 3 2009-01-03 100.47396 136.35269 152.3498
+## 4 2009-01-04 106.13097 128.25358 150.9811
+## 5 2009-01-05  98.29982  97.56034 143.7360
+## 6 2009-01-06 102.25760  87.32095 147.9675</code></pre>
 <pre class="r"><code>setequal(stocks, stocks_wide)</code></pre>
 <pre><code>## TRUE</code></pre>
 <pre class="r"><code># We can make this even wider where the row is the stock
 stocks_wider &lt;- stocks_long %&gt;% spread(time, price)
 head(stocks_wider)</code></pre>
 <pre><code>##   stock 2009-01-01 2009-01-02 2009-01-03 2009-01-04 2009-01-05 2009-01-06
-## 1     X   87.92934   102.7743   110.8444   76.54302   104.2912   105.0606
-## 2     Y  115.45615   105.0323   109.4749  126.28918   144.1899   122.7943
-## 3     Z  150.53635   148.0373   148.2378  151.83836   147.2251   144.2072
+## 1     X  108.01125   79.84799   100.4740   106.1310   98.29982  102.25760
+## 2     Y   93.08611  121.25669   136.3527   128.2536   97.56034   87.32095
+## 3     Z  152.32303  153.89850   152.3498   150.9811  143.73599  147.96749
 ##   2009-01-07 2009-01-08 2009-01-09 2009-01-10
-## 1    94.2526   94.53368   94.35548   91.09962
-## 2   114.7798  106.77609  108.25657  173.31670
-## 3   152.2990  145.90538  149.93945  146.25621</code></pre>
+## 1   108.9240   98.52387   115.3718   104.5262
+## 2   123.6391  138.74614   110.8400   132.5535
+## 3   153.4331  151.80747   146.4084   151.2760</code></pre>
 </div>
 <div id="note-on-reshape2" class="section level3">
 <h3><span class="header-section-number">2.2.5</span> Note on <code>reshape2</code></h3>
@@ -1859,10 +1878,10 @@ head(stocks_wider)</code></pre>
 </div>
 <div id="data-manipulation" class="section level1">
 <h1><span class="header-section-number">3</span> Data Manipulation</h1>
-<p>Data manipulation is a core task in data analysis. Data manipulation refers to the process of changing or modifiying data so you can efficiently extract, filter, and transform it. In the Tidyverse, the <code>dplyr</code> package consists of five “verbs” that are useful for data manipulation: <code>select()</code>, <code>mutate()</code>, <code>filter()</code>, <code>arrange()</code>, and <code>summarize()</code>. <code>dplyr</code> also assists in binding, grouping, and merging data, as well as accessing external databases.</p>
+<p>Data manipulation is a core task in data analysis. Data manipulation refers to the process of changing or modifying data so you can efficiently extract, filter, and transform it. In the Tidyverse, the <code>dplyr</code> package consists of five “verbs” that are useful for data manipulation: <code>select()</code>, <code>mutate()</code>, <code>filter()</code>, <code>arrange()</code>, and <code>summarize()</code>. <code>dplyr</code> also assists in binding, grouping, and merging data, as well as accessing external databases.</p>
 <div id="selecting-columns" class="section level2">
 <h2><span class="header-section-number">3.1</span> Selecting Columns</h2>
-<p>Often we will want to select columns from a data frame. To do this in <code>dplyr</code> there is the <code>select()</code> function which takes a table and a number of variable names You can also use <code>-</code> to exclude some variables, or index variables using column numbers.</p>
+<p>Often we will want to select columns from a data frame. To do this in <code>dplyr</code> there is the <code>select()</code> function which takes a table and a number of variable names. You can also use <code>-</code> to exclude some variables, or index variables using column numbers.</p>
 <pre class="r"><code>data(iris)
 reduced &lt;- iris %&gt;% select(Species, Sepal.Width)
 head(reduced)</code></pre>
@@ -1905,7 +1924,7 @@ summary(iris$Sepal.Area)</code></pre>
 </div>
 <div id="filtering-data" class="section level2">
 <h2><span class="header-section-number">3.3</span> Filtering Data</h2>
-<p><code>filter()</code> filters out rows based upon some expression. Think about it as the row-wise function of <code>select()</code>. We can narrow observations based upon boolean logicals. <code>filter()</code> will return all rows that pass the logical test that is specified. This returns a new dataset that must be saved.</p>
+<p><code>filter()</code> filters out rows based upon some expression. Think about it as the row-wise function of <code>select()</code>. We can narrow observations based upon Boolean logicals. <code>filter()</code> will return all rows that pass the logical test that is specified. This returns a new dataset that must be saved.</p>
 <pre class="r"><code>setosa_df &lt;- iris %&gt;% filter(Species == &quot;setosa&quot;)
 large_sepals &lt;- iris %&gt;% filter(Sepal.Area &gt; mean(Sepal.Area))
 
@@ -1971,7 +1990,7 @@ head(sorted_large_irises)  </code></pre>
 <div id="summarizing-data" class="section level2">
 <h2><span class="header-section-number">3.5</span> Summarizing Data</h2>
 <p>We can also use the <code>summarise()</code> or <code>summarize()</code> function to create a new dataset of summary statistics. These functions include the same syntax as the prior commands and allows you to choose summary statistics to include in a new aggregated dataframe. Aggregate functions should be used, these are functions that take on a vector of values and return a single number.</p>
-<p><code>dplyr</code> also comes with a variety of aggregate functions that are in addiion to those defined in R:</p>
+<p><code>dplyr</code> also comes with a variety of aggregate functions that are in addition to those defined in R:</p>
 <ul>
 <li><code>first(x)</code>: The first element of vector x.</li>
 <li><code>last(x)</code>: The last element of vector x.</li>
@@ -1991,7 +2010,7 @@ iris_summary</code></pre>
 </div>
 <div id="grouping-data" class="section level2">
 <h2><span class="header-section-number">3.6</span> Grouping Data</h2>
-<p><code>dplyr</code> also has built-in means to group data. <code>summarize()</code> eturnsaggregated measures for a vector or for an entire dataset. But, what if we are interested in doing aggregate measures for groups of rows? We can look at group-based differences by using the <code>group_by()</code> function. This function takes a tibble and some group-indicator. The dataset will look the same, but then when you <code>summarise()</code> a grouped dataset, the cool part comes in, you get groupped aggregate statistics.</p>
+<p><code>dplyr</code> also has built-in means to group data. <code>summarize()</code> returns aggregated measures for a vector or for an entire dataset. But, what if we are interested in doing aggregate measures for groups of rows? We can look at group-based differences by using the <code>group_by()</code> function. This function takes a tibble and some group-indicator. The dataset will look the same, but then when you <code>summarise()</code> a grouped dataset, the cool part comes in, you get grouped aggregate statistics.</p>
 <pre class="r"><code>iris_summary &lt;- iris %&gt;%
   mutate(Sepal.Area = Sepal.Length * Sepal.Width, Petal.Area = Petal.Length * Petal.Width) %&gt;%
     group_by(Species) %&gt;% 
@@ -2041,7 +2060,7 @@ setequal(iris_whole, iris_whole_purr)</code></pre>
 </div>
 <div id="joining-data" class="section level2">
 <h2><span class="header-section-number">3.8</span> Joining Data</h2>
-<p>Often our data in R exist across multiple datasets. As such, we will want to join datasets so that assembling datasets will be much easier and more effective. In base R there is the <code>merge()</code> function. <code>dplyr</code>’s join functions are better than base R’s <code>merge()</code> in that it preserves row order, has better synax, and can be used for different databases. The grammar of <code>dplyr</code>’s data joins are similar to PostgreSQL’s grammar.</p>
+<p>Often our data in R exist across multiple datasets. As such, we will want to join datasets so that assembling datasets will be much easier and more effective. In base R there is the <code>merge()</code> function. <code>dplyr</code>’s join functions are better than base R’s <code>merge()</code> in that it preserves row order, has better syntax, and can be used for different databases. The grammar of <code>dplyr</code>’s data joins are similar to PostgreSQL’s grammar.</p>
 <div id="keys" class="section level3">
 <h3><span class="header-section-number">3.8.1</span> Keys</h3>
 <p>A join combines columns of two or more dataframe according to matching values in some identifier variables. To do this, analysts identify a set of keys that exist in both dataframes and combine tables according to matching key values in both dataframes. The first table’s key is the primary key and the second table’s key is the foreign key. The primary key should uniquely identify each row in a dataframe. The foreign key only has to match with a primary key. Sometimes you will have multiple keys.</p>
@@ -2062,12 +2081,12 @@ head(left_joined)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##   key   variable1 variable2 variable3
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 a        0.292      2.89       1.42
-## 2 b        0.899      0.122      3.45
-## 3 c       -0.519      0.887      2.84
-## 4 d        0.554      2.95       3.22
-## 5 e       -0.0880     1.93       2.98
-## 6 f       -1.14       2.91       2.32</code></pre>
+## 1 a         2.08      0.953     2.75 
+## 2 b        -0.944    -0.768     1.74 
+## 3 c        -0.675     0.390     2.62 
+## 4 d         1.02      1.59      4.05 
+## 5 e        -0.818     2.20      0.844
+## 6 f        -0.957     1.21      3.35</code></pre>
 <pre class="r"><code>nrow(left_joined)</code></pre>
 <pre><code>## [1] 26</code></pre>
 <pre class="r"><code>left_joined$key</code></pre>
@@ -2079,12 +2098,12 @@ head(right_joined)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##   key   variable1 variable2 variable3
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 a        0.292      2.89       1.42
-## 2 b        0.899      0.122      3.45
-## 3 c       -0.519      0.887      2.84
-## 4 d        0.554      2.95       3.22
-## 5 e       -0.0880     1.93       2.98
-## 6 f       -1.14       2.91       2.32</code></pre>
+## 1 a         2.08      0.953     2.75 
+## 2 b        -0.944    -0.768     1.74 
+## 3 c        -0.675     0.390     2.62 
+## 4 d         1.02      1.59      4.05 
+## 5 e        -0.818     2.20      0.844
+## 6 f        -0.957     1.21      3.35</code></pre>
 <pre class="r"><code>nrow(right_joined)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>right_joined$key</code></pre>
@@ -2102,9 +2121,9 @@ head(inner_joined)</code></pre>
 <pre><code>## # A tibble: 3 x 4
 ##   key   variable1 variable2 variable3
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 B         1.10     1.01        1.58
-## 2 C         0.529    0.0835      1.10
-## 3 D         0.789   -0.227       2.42</code></pre>
+## 1 B         0.126     1.41       2.59
+## 2 C         0.473     0.279      1.33
+## 3 D        -0.187     0.410      5.17</code></pre>
 <pre class="r"><code>nrow(inner_joined)</code></pre>
 <pre><code>## [1] 3</code></pre>
 <pre class="r"><code>inner_joined$key</code></pre>
@@ -2115,12 +2134,12 @@ head(full_joined)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##   key   variable1 variable2 variable3
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 A        -0.781    1.54       NA   
-## 2 B         1.10     1.01        1.58
-## 3 C         0.529    0.0835      1.10
-## 4 D         0.789   -0.227       2.42
-## 5 E         0.457    1.04       NA   
-## 6 X        NA       NA           2.15</code></pre>
+## 1 A        -1.15      0.597     NA   
+## 2 B         0.126     1.41       2.59
+## 3 C         0.473     0.279      1.33
+## 4 D        -0.187     0.410      5.17
+## 5 E        -1.62     -0.170     NA   
+## 6 X        NA        NA          3.01</code></pre>
 <pre class="r"><code>nrow(full_joined)</code></pre>
 <pre><code>## [1] 8</code></pre>
 <pre class="r"><code>full_joined$key</code></pre>
