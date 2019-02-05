@@ -1,12 +1,9 @@
 ---
-title: "Data Manipulation in the Tidyverse"
-author: "Benjamin W. Campbell, Senior Fellow, Program in Statistics and Methodology (PRISM)"
-date: "25 September, 2018"
+Title: "Data Manipulation in the Tidyverse"
+Author: "Benjamin W. Campbell, Senior Fellow, Program in Statistics and Methodology (PRISM)"
+Date: "25 September, 2018"
 output:
   html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true
     number_sections: true
 ---
 
