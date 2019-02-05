@@ -10,10 +10,6 @@ output:
     number_sections: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Introduction
 Welcome to the Program in Statistics and Methodology's (PRISM) Data Manipulation in the Tidyverse Workshop.  This workshop was delivered on 25 September, 2018 as part of PRISM's regularly scheduled programming and Data Analytics Month @ Ohio State.  
 
